@@ -11,17 +11,6 @@ interface Config {
     origin: (string | RegExp)[];
     credentials: boolean;
   };
-  tsMain: {
-    url: string;
-    clientId: string;
-    clientSecret: string;
-  };
-  identityProvider: {
-    clientId: string;
-    secret: string;
-    redirectUri: string;
-    scope: string;
-  };
   cookies: {
     jwtSecret: string;
     name: string;
@@ -46,22 +35,11 @@ const configProd: Config = {
     ],
     credentials: true,
   },
-  tsMain: {
-    url: process.env.TSMAIN_URL as string,
-    clientId: process.env.TSMAIN_CLIENT_ID as string,
-    clientSecret: process.env.TSMAIN_CLIENT_SECRET as string,
-  },
-  identityProvider: {
-    clientId: process.env.USERASSISTANT_FED_CLIENT_ID as string,
-    secret: process.env.USERASSISTANT_FED_SECRET as string,
-    redirectUri: process.env.USERASSISTANT_FED_REDIRECT_URI as string,
-    scope: "openid offline_access talentsoft.career.api.read",
-  },
   cookies: {
-    jwtSecret: process.env.USERASSISTANT_JWT_SECRET as string,
-    name: process.env.USERASSISTANT_COOKIE_NAME as string,
+    jwtSecret: process.env.JWT_SECRET as string,
+    name: process.env.COOKIE_NAME as string,
     options: {
-      domain: process.env.USERASSISTANT_COOKIE_DOMAIN as string,
+      domain: process.env.COOKIE_DOMAIN as string,
       sameSite: "none",
       secure: true,
       httpOnly: true,
@@ -74,28 +52,15 @@ const configLocal: Config = {
     (process.env.NODE_ENV as nodeEnvironnementEnum) ??
     nodeEnvironnementEnum.PRODUCTION,
   cors: {
-    origin: [/\.local\.test/, /\.talent-soft\.com$/],
+    origin: [/\.local\.test/, /\.talent-soft\.com$/, /localhost/],
     credentials: true,
   },
-  tsMain: {
-    url: process.env.TSMAIN_URL as string,
-    clientId: process.env.TSMAIN_CLIENT_ID as string,
-    clientSecret: process.env.TSMAIN_CLIENT_SECRET as string,
-  },
-  identityProvider: {
-    clientId: process.env.USERASSISTANT_FED_CLIENT_ID as string,
-    secret: process.env.USERASSISTANT_FED_SECRET as string,
-    redirectUri: process.env.USERASSISTANT_FED_REDIRECT_URI as string,
-    scope: "openid offline_access talentsoft.career.api.read",
-  },
   cookies: {
-    jwtSecret: process.env.USERASSISTANT_JWT_SECRET as string,
-    name: process.env.USERASSISTANT_COOKIE_NAME as string,
-    options: { domain: process.env.USERASSISTANT_COOKIE_DOMAIN as string },
+    jwtSecret: process.env.JWT_SECRET as string,
+    name: process.env.COOKIE_NAME as string,
+    options: { domain: process.env.COOKIE_DOMAIN as string },
   },
 };
-
-//TODO: check if some env are undefined
 
 export default ((process.env.NODE_ENV as nodeEnvironnementEnum) ??
   nodeEnvironnementEnum.PRODUCTION) === nodeEnvironnementEnum.PRODUCTION

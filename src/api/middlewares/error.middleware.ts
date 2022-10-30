@@ -1,5 +1,5 @@
-import getLogger from "../../utils/logger";
 import { Request, Response, NextFunction } from "express";
+import getLogger from "../../utils/logger";
 
 const logger = getLogger("Error Middleware");
 
@@ -10,7 +10,7 @@ export const errorMiddleware = (
   next: NextFunction
 ) => {
   if (res.headersSent) {
-    return next(err);
+    next(err);
   }
   logger.error(`Critical error: ${err}`);
   if (err.stack) logger.error(`Stacktrace: ${err.stack}`);

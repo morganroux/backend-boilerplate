@@ -1,46 +1,44 @@
 import { Router } from "express";
-import { requireDiscovery } from "../middlewares/discovery.middleware";
+import jwt from "jsonwebtoken";
 import { asyncErrorMiddleware } from "../middlewares/error.middleware";
-import config from "../../config";
 import getLogger from "../../utils/logger";
-import { SiteTypeEnum } from "../../services/discoveryFactory/components/base";
-import { getIdentityProvider } from "../../services/identityProviderFactory";
+import { getTest } from "../../services/prisma/test";
+import {
+  authMiddleware,
+  requireLoggedIn,
+  requireNotLoggedIn,
+} from "../middlewares/auth.middleware";
+import config from "../../config";
 
 const router = Router();
 const logger = getLogger("Auth routes");
 
+router.use(authMiddleware);
+
 router.get(
-  "/auth",
-  requireDiscovery,
+  "/test",
+  requireLoggedIn,
   asyncErrorMiddleware(async (req, res) => {
-    const idP = getIdentityProvider(
-      req.uaContext.globals.discoveryUrls![SiteTypeEnum.AUTHENTICATION]
-    );
-    const url = await idP.buildOidcAuthorizationUrl();
-    res.redirect(301, url);
+    const test = await getTest("test");
+    logger.info("Yay ! auth works !");
+    res.status(200).send(`Yay ! auth works ! ${JSON.stringify(test)}`);
   })
 );
 
-router.get(
-  "/signin-oidc",
-  requireDiscovery,
+router.use(
+  "/setCookie",
+  requireNotLoggedIn,
   asyncErrorMiddleware(async (req, res) => {
-    if (!req.uaContext.globals.discoveryUrls) {
-      logger.error("discovery urls are null or undefined");
-      throw new Error("discovery urls are null or undefined");
-    }
-    const { code } = req.query;
-    const idP = getIdentityProvider(
-      req.uaContext.globals.discoveryUrls[SiteTypeEnum.AUTHENTICATION]
+    const payload = jwt.sign(
+      { test: "This is a cookie test" },
+      config.cookies.jwtSecret
     );
-    const tokenData = await idP.getTokenFromIdp(code as string);
-    await idP.storeToken(tokenData);
-    const { sessionCookie } = await idP.buildSessionCookie(tokenData);
     res
-      .cookie(config.cookies.name, sessionCookie, config.cookies.options)
+      .cookie(config.cookies.name, payload, {
+        ...config.cookies.options,
+      })
       .status(200)
-      .send();
+      .send("cookies set");
   })
 );
-
 export default router;

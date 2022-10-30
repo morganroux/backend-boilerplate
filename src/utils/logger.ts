@@ -19,8 +19,6 @@ const colors = {
   warn: "yellow",
   info: "green",
   http: "magenta",
-  // it's okay since we're not in UI but in backend
-  // eslint-disable-next-line @cegid/no-hardcoded-colors
   debug: "white",
 };
 

@@ -1,0 +1,4 @@
+built/
+.eslintrc.json
+node_modules/
+src/api/graphql/codegen

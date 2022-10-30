@@ -1,12 +1,17 @@
 import { Router } from "express";
-import globalRoutes from "./globalRoutes";
-import dataRoutes from "./dataRoutes";
-import commandRoutes from "./commandRoutes";
-import { authMiddleware } from "../middlewares/auth.middleware";
+import { loggers } from "winston";
+import config from "../../config";
+import { getTest } from "../../services/prisma/test";
+import authRoutes from "./authRoutes";
 
 const router = Router();
-router.use(authMiddleware);
-router.use("/", globalRoutes);
-router.use("/data", dataRoutes);
-router.use("/commands", commandRoutes);
+
+router.use("/auth", authRoutes);
+router.use("/hello", async (req, res) => {
+  const test = await getTest("test");
+  // eslint-disable-next-line no-console
+  console.log("===", test);
+  res.status(200).send("Hello world !");
+});
+
 export default router;

@@ -1,0 +1,30 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo '🏗️👷 Styling, testing and building your project before committing'
+
+npm run prettier:check ||
+(
+    echo '❌ Prettier check Failed. Run npm run prettier:write, add changes and try commit again.';
+    false;
+)
+echo '✅ Your code style is looking good, checking lint now ...'
+
+npm run lint ||
+(
+        echo '❌ Lint check Failed. Make the required changes listed above, add changes and try to commit again.'
+        false;
+)
+
+echo '✅ Linting OK, congrats ! Checking ts types now ...'
+
+npm run check-types ||
+(
+        echo '❌ TS Types failed. Make the required changes listed above, add changes and try to commit again.'
+        false;
+)
+
+# If everything passes... Now we can commit
+echo '🎉🎉 Everything looks perfect. Commiting ...'
+
+

@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo '🏗️👷 Checking commit message'
+
+npx --no -- commitlint --edit "$1" ||
+(
+    echo '❌ Please ensure your commit message follows : https://www.conventionalcommits.org/';
+    false;
+)
+
+echo '✅ Commit message OK !'

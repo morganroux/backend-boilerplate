@@ -1,6 +1,4 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Default",
   "compilerOptions": {
     "lib": ["es6", "dom"], // dom is needed for supertest
     "outDir": "./build",
@@ -20,7 +18,8 @@
     "skipLibCheck": true,
     "strict": true,
     "noImplicitAny": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+		"module": "commonjs",
   },
   "include": ["./src/**/*.ts"],
   "exclude": ["node_modules", "build"]

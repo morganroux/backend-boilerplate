@@ -7,7 +7,7 @@
     "predev": "npm run db:generate",
     "prebuild": "npm run db:generate",
     "clean": "rimraf node_modules build",
-    "dev": "ts-node-dev --respawn --transpile-only ./src/index.ts",
+    "dev": "ts-node-dev --respawn --transpile-only --exit-child ./src/index.ts",
     "start": "npm run dev",
     "start:prod": "npm run build && node ./build/index.js",
     "build": "tsc",
